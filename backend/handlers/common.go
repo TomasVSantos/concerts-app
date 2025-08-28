@@ -1,8 +1,8 @@
 package handlers
 
 import (
-    "encoding/json"
-    "net/http"
+	"encoding/json"
+	"net/http"
 )
 
 type errorPayload struct {
@@ -23,6 +23,10 @@ func readJSON(r *http.Request, v interface{}) error {
     dec := json.NewDecoder(r.Body)
     dec.DisallowUnknownFields()
     return dec.Decode(v)
+}
+
+func redirect(w http.ResponseWriter, r *http.Request, path string) {
+    http.Redirect(w, r, path, http.StatusFound)
 }
 
 

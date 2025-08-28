@@ -5,9 +5,11 @@
       <a routerLink="/concerts">Concerts</a>
     </div>
     <nav class="nav">
-      <a routerLink="/concerts" routerLinkActive="active">Concerts</a>
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-      <a routerLink="/register" routerLinkActive="active">Register</a>
+      <a routerLink="/concerts" routerLinkActive="active" *ngIf="auth.token()">Concerts</a>
+
+      <a routerLink="/login" routerLinkActive="active" *ngIf="!auth.token()">Login</a>
+      <a routerLink="/register" routerLinkActive="active" *ngIf="!auth.token()">Register</a>
+      <a href="#" (click)="logout()" *ngIf="auth.token()">Logout</a>
     </nav>
   </div>
 </header>

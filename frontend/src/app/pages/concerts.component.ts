@@ -1,21 +1,18 @@
 import { Component, inject, signal, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ConcertsService, Concert } from '../services/concerts.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-concerts',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="row" style="align-items:center; margin-bottom: 16px">
       <h1 class="title">Your concerts</h1>
       <span class="spacer"></span>
-      <span class="muted" *ngIf="auth.username()">Signed in as {{ auth.username() }}</span>
-      <button class="btn ghost" (click)="onLogout()" *ngIf="auth.token()">Logout</button>
-      <a class="btn" routerLink="/login" *ngIf="!auth.token()">Login</a>
     </div>
 
     <div class="card" *ngIf="auth.token()" style="margin-bottom: 16px">
@@ -76,6 +73,9 @@ export class ConcertsComponent {
   location = '';
 
   constructor() {
+    if (!this.auth.token()) {
+      this.router.navigateByUrl('/login');
+    }
     if (isPlatformBrowser(this.platformId)) {
       this.load();
     }
@@ -104,10 +104,5 @@ export class ConcertsComponent {
       next: () => this.concerts.update((arr) => arr.filter((c) => c.id !== id)),
       error: (err) => this.error.set(err?.error?.error || 'Failed to delete'),
     });
-  }
-
-  onLogout() {
-    this.auth.logout();
-    this.router.navigateByUrl('/login');
   }
 }

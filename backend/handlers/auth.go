@@ -1,20 +1,20 @@
 package handlers
 
 import (
-    "context"
-    "database/sql"
-    "errors"
-    "fmt"
-    "net/http"
-    "os"
-    "strconv"
-    "strings"
-    "time"
+	"context"
+	"database/sql"
+	"errors"
+	"fmt"
+	"net/http"
+	"os"
+	"strconv"
+	"strings"
+	"time"
 
-    "github.com/golang-jwt/jwt/v5"
-    "golang.org/x/crypto/bcrypt"
+	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 
-    "concerts/db"
+	"concerts/db"
 )
 
 type contextKey string
