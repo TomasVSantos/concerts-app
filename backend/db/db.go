@@ -1,14 +1,14 @@
 package db
 
 import (
-    "database/sql"
-    "errors"
-    "fmt"
-    "os"
-    "path/filepath"
-    "sync"
+	"database/sql"
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+	"sync"
 
-    _ "modernc.org/sqlite"
+	_ "modernc.org/sqlite"
 )
 
 var (
@@ -96,6 +96,15 @@ func migrate(c *sql.DB) error {
             FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
         );`,
         `CREATE INDEX IF NOT EXISTS idx_concerts_user_id ON concerts(user_id);`,
+        `CREATE TABLE IF NOT EXISTS songs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            notes TEXT,
+            concert_id INTEGER NOT NULL,
+            song_order INTEGER NOT NULL DEFAULT 0,
+            FOREIGN KEY(concert_id) REFERENCES concerts(id) ON DELETE CASCADE
+        );`,
+        `CREATE INDEX IF NOT EXISTS idx_songs_concert_id ON songs(concert_id);`,
     }
     for _, s := range stmts {
         if _, err := c.Exec(s); err != nil {

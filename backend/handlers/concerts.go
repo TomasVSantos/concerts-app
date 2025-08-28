@@ -1,16 +1,16 @@
 package handlers
 
 import (
-    "database/sql"
-    "errors"
-    "fmt"
-    "net/http"
-    "strconv"
+	"database/sql"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-    "github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 
-    "concerts/db"
-    "concerts/models"
+	"concerts/db"
+	"concerts/models"
 )
 
 // ListConcerts returns all concerts for the authenticated user.
@@ -39,6 +39,30 @@ func ListConcerts(w http.ResponseWriter, r *http.Request) {
     }
     writeJSON(w, http.StatusOK, list)
 }
+
+func GetConcert(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		uid, ok := UserIDFromContext(ctx)
+		if !ok {
+				writeError(w, http.StatusUnauthorized, errors.New("unauthorized"))
+				return
+		}
+		vars := mux.Vars(r)
+		idStr := vars["id"]
+		cid, err := strconv.ParseInt(idStr, 10, 64)
+		if err != nil {
+				writeError(w, http.StatusBadRequest, errors.New("invalid id"))
+				return
+		}
+		connection := db.Get()
+		var c models.Concert
+		if err := connection.QueryRow("SELECT id, title, date, location, user_id FROM concerts WHERE id = ? AND user_id = ?", cid, uid).Scan(&c.ID, &c.Title, &c.Date, &c.Location, &c.UserID); err != nil {
+				writeError(w, http.StatusInternalServerError, fmt.Errorf("db query error: %w", err))
+				return
+		}
+		writeJSON(w, http.StatusOK, c)
+}
+
 
 type createConcertRequest struct {
     Title    string `json:"title"`

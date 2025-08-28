@@ -39,7 +39,18 @@ func main() {
     concerts.HandleFunc("/", handlers.ListConcerts).Methods(http.MethodGet)
     concerts.HandleFunc("", handlers.CreateConcert).Methods(http.MethodPost)
     concerts.HandleFunc("/", handlers.CreateConcert).Methods(http.MethodPost)
+    concerts.HandleFunc("/{id}", handlers.GetConcert).Methods(http.MethodGet)
     concerts.HandleFunc("/{id}", handlers.DeleteConcert).Methods(http.MethodDelete)
+
+    // Songs (protected)
+    songs := r.PathPrefix("/concerts/{concertId}/songs").Subrouter()
+    songs.Use(handlers.RequireAuth)
+    songs.HandleFunc("", handlers.ListSongs).Methods(http.MethodGet)
+    songs.HandleFunc("/", handlers.ListSongs).Methods(http.MethodGet)
+    songs.HandleFunc("", handlers.CreateSong).Methods(http.MethodPost)
+    songs.HandleFunc("/", handlers.CreateSong).Methods(http.MethodPost)
+    songs.HandleFunc("/{songId}", handlers.DeleteSong).Methods(http.MethodDelete)
+    songs.HandleFunc("/order", handlers.UpdateSongOrder).Methods(http.MethodPut)
 
     srv := &http.Server{
         Addr:              getAddr(),

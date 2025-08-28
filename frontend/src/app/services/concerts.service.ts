@@ -18,6 +18,10 @@ export class ConcertsService {
     return this.http.get<Concert[]>(this.baseUrl);
   }
 
+  get(id: number) {
+    return this.http.get<Concert>(`${this.baseUrl}/${id}`);
+  }
+
   add(payload: { title: string; date: string; location: string }) {
     return this.http.post<Concert>(this.baseUrl, payload);
   }

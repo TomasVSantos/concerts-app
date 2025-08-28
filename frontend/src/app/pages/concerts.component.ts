@@ -51,8 +51,13 @@ import { AuthService } from '../services/auth.service';
             </div>
             <div class="meta">{{ c.date }} • {{ c.location }}</div>
           </div>
-          <div class="actions">
-            <button class="btn ghost" (click)="remove(c.id)">Delete</button>
+          <div class="actions-container">
+            <div class="actions">
+              <button class="btn outline" (click)="editSetlist(c.id)">Edit Setlist</button>
+            </div>
+            <div class="actions">
+              <button class="btn ghost" (click)="remove(c.id)">Delete</button>
+            </div>
           </div>
         </div>
       </div>
@@ -104,5 +109,9 @@ export class ConcertsComponent {
       next: () => this.concerts.update((arr) => arr.filter((c) => c.id !== id)),
       error: (err) => this.error.set(err?.error?.error || 'Failed to delete'),
     });
+  }
+
+  editSetlist(id: number) {
+    this.router.navigate(['/concerts', id, 'setlist']);
   }
 }
