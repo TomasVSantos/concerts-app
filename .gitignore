@@ -1,0 +1,35 @@
+# Node modules and Angular build output
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+frontend/.env.*
+
+# Editor and system files
+.DS_Store
+.vscode/
+*.swp
+
+# Go build and dependency files
+backend/bin/
+backend/__debug_bin*
+backend/*.exe
+backend/*.test
+backend/coverage.out
+
+# Go modules cache (optional, usually not checked in)
+backend/go.sum
+backend/go.mod
+
+# Database and generated files
+backend/data/*.db
+
+# Logs
+*.log
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Environment files
+backend/.env
